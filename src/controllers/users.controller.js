@@ -5,8 +5,11 @@ import {
   updateUser,
   deleteUser,
 } from '../services/users.service.js';
-import {userIdSchema, updateUserSchema} from '../validations/users.validation.js';
-import {formatValidationError} from '../utils/format.js';
+import {
+  userIdSchema,
+  updateUserSchema,
+} from '../validations/users.validation.js';
+import { formatValidationError } from '../utils/format.js';
 
 export const fetchAllUsers = async (req, res, next) => {
   try {
@@ -27,7 +30,7 @@ export const fetchAllUsers = async (req, res, next) => {
 export const fetchUserById = async (req, res, next) => {
   try {
     logger.info(`Getting user by id: ${req.params.id}`);
-    const validationResult = userIdSchema.safeParse({id: req.params.id});
+    const validationResult = userIdSchema.safeParse({ id: req.params.id });
 
     if (!validationResult.success) {
       return res.status(400).json({
@@ -36,7 +39,7 @@ export const fetchUserById = async (req, res, next) => {
       });
     }
 
-    const {id} = validationResult.data;
+    const { id } = validationResult.data;
     const user = await getUserById(id);
     logger.info(`User ${user.email} retrieved successfully`);
     res.json({
@@ -46,7 +49,7 @@ export const fetchUserById = async (req, res, next) => {
   } catch (e) {
     logger.error(`Error fetching user by id: ${e.message}`);
     if (e.message === 'User not found') {
-      return res.status(404).json({error: 'User not found'});
+      return res.status(404).json({ error: 'User not found' });
     }
     next(e);
   }
@@ -55,7 +58,7 @@ export const fetchUserById = async (req, res, next) => {
 export const updateUserById = async (req, res, next) => {
   try {
     logger.info(`Updating user: ${req.params.id}`);
-    const idValidationResult = userIdSchema.safeParse({id: req.params.id});
+    const idValidationResult = userIdSchema.safeParse({ id: req.params.id });
 
     if (!idValidationResult.success) {
       return res.status(400).json({
@@ -72,7 +75,7 @@ export const updateUserById = async (req, res, next) => {
       });
     }
 
-    const {id} = idValidationResult.data;
+    const { id } = idValidationResult.data;
     const updates = updateValidationResult.data;
     if (!req.user) {
       return res.status(401).json({
@@ -109,10 +112,10 @@ export const updateUserById = async (req, res, next) => {
     logger.error(`Error updating user: ${e.message}`);
 
     if (e.message === 'User not found') {
-      return res.status(404).json({error: 'User not found'});
+      return res.status(404).json({ error: 'User not found' });
     }
     if (e.message === 'Email already exists') {
-      return res.status(409).json({error: 'Email already exists'});
+      return res.status(409).json({ error: 'Email already exists' });
     }
 
     next(e);
@@ -122,7 +125,7 @@ export const updateUserById = async (req, res, next) => {
 export const deleteUserById = async (req, res, next) => {
   try {
     logger.info(`Deleting user: ${req.params.id}`);
-    const validationResult = userIdSchema.safeParse({id: req.params.id});
+    const validationResult = userIdSchema.safeParse({ id: req.params.id });
 
     if (!validationResult.success) {
       return res.status(400).json({
@@ -131,7 +134,7 @@ export const deleteUserById = async (req, res, next) => {
       });
     }
 
-    const {id} = validationResult.data;
+    const { id } = validationResult.data;
     if (!req.user) {
       return res.status(401).json({
         error: 'Authentication required',
@@ -163,7 +166,7 @@ export const deleteUserById = async (req, res, next) => {
     logger.error(`Error deleting user: ${e.message}`);
 
     if (e.message === 'User not found') {
-      return res.status(404).json({error: 'User not found'});
+      return res.status(404).json({ error: 'User not found' });
     }
 
     next(e);

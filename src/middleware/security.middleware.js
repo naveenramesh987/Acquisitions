@@ -1,5 +1,5 @@
 import aj from '../config/arcjet.js';
-import {slidingWindow} from '@arcjet/node';
+import { slidingWindow } from '@arcjet/node';
 import logger from '../config/logger.js';
 
 const securityMiddleware = async (req, res, next) => {
@@ -25,7 +25,7 @@ const securityMiddleware = async (req, res, next) => {
         interval: '1m',
         max: limit,
         name: `${role}-rate-limit`,
-      })
+      }),
     );
 
     const decision = await client.protect(req);
@@ -36,7 +36,12 @@ const securityMiddleware = async (req, res, next) => {
         path: req.path,
       });
 
-      return res.status(403).json({error: 'Unauthorized', message: 'Automated requests not allowed'});
+      return res
+        .status(403)
+        .json({
+          error: 'Unauthorized',
+          message: 'Automated requests not allowed',
+        });
     }
 
     if (decision.isDenied() && decision.reason.isShield()) {
@@ -47,7 +52,12 @@ const securityMiddleware = async (req, res, next) => {
         method: req.method,
       });
 
-      return res.status(403).json({error: 'Unauthorized', message: 'Requests blocked by security policy'});
+      return res
+        .status(403)
+        .json({
+          error: 'Unauthorized',
+          message: 'Requests blocked by security policy',
+        });
     }
 
     if (decision.isDenied() && decision.reason.isRateLimit()) {
@@ -57,7 +67,9 @@ const securityMiddleware = async (req, res, next) => {
         path: req.path,
       });
 
-      return res.status(403).json({error: 'Unauthorized', message: 'Too many requests'});
+      return res
+        .status(403)
+        .json({ error: 'Unauthorized', message: 'Too many requests' });
     }
 
     next();
@@ -65,7 +77,7 @@ const securityMiddleware = async (req, res, next) => {
     console.error('Arcjet middleware error:', e);
     res.status(500).json({
       error: 'Internal server error',
-      message: 'Something went wrong with security middleware'
+      message: 'Something went wrong with security middleware',
     });
   }
 };

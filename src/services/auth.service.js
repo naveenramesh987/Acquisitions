@@ -1,10 +1,10 @@
 import logger from '../config/logger.js';
 import bcrypt from 'bcrypt';
-import {users} from '../models/user.model.js';
-import {db} from '#config/database.js';
-import {eq} from 'drizzle-orm';
+import { users } from '../models/user.model.js';
+import { db } from '#config/database.js';
+import { eq } from 'drizzle-orm';
 
-export const hashPassword = async password => {
+export const hashPassword = async (password) => {
   try {
     return await bcrypt.hash(password, 10);
   } catch (e) {
@@ -22,7 +22,7 @@ export const comparePassword = async (password, hashedPassword) => {
   }
 };
 
-export const createUser = async ({name, email, password, role = 'user'}) => {
+export const createUser = async ({ name, email, password, role = 'user' }) => {
   try {
     const existingUser = await db
       .select()
@@ -37,7 +37,7 @@ export const createUser = async ({name, email, password, role = 'user'}) => {
 
     const [newUser] = await db
       .insert(users)
-      .values({name, email, password: password_hash, role})
+      .values({ name, email, password: password_hash, role })
       .returning({
         id: users.id,
         name: users.name,
@@ -54,7 +54,7 @@ export const createUser = async ({name, email, password, role = 'user'}) => {
   }
 };
 
-export const authenticateUser = async ({email, password}) => {
+export const authenticateUser = async ({ email, password }) => {
   try {
     const [existingUser] = await db
       .select()
@@ -68,7 +68,7 @@ export const authenticateUser = async ({email, password}) => {
 
     const isPasswordValid = await comparePassword(
       password,
-      existingUser.password
+      existingUser.password,
     );
 
     if (!isPasswordValid) {

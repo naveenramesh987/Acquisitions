@@ -1,5 +1,5 @@
 import logger from '../config/logger.js';
-import {jwtToken} from '../utils/jwt.js';
+import { jwtToken } from '../utils/jwt.js';
 
 export const authenticateToken = (req, res, next) => {
   try {
@@ -33,7 +33,7 @@ export const authenticateToken = (req, res, next) => {
   }
 };
 
-export const requireRole = allowedRoles => {
+export const requireRole = (allowedRoles) => {
   return (req, res, next) => {
     try {
       if (!req.user) {
@@ -45,7 +45,7 @@ export const requireRole = allowedRoles => {
 
       if (!allowedRoles.includes(req.user.role)) {
         logger.warn(
-          `Access denied for user ${req.user.email} with role ${req.user.role}. Required: ${allowedRoles.join(', ')}`
+          `Access denied for user ${req.user.email} with role ${req.user.role}. Required: ${allowedRoles.join(', ')}`,
         );
         return res.status(403).json({
           error: 'Access denied',

@@ -19,6 +19,8 @@
     "dev": "node --watch src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
@@ -62,6 +64,7 @@
     "globals": "^17.3.0",
     "jest": "^30.2.0",
     "npx": "^10.2.2",
+    "prettier": "^3.8.1",
     "supertest": "^7.2.2"
   }
 }

@@ -16,7 +16,7 @@ describe('API Endpoints', () => {
       const response = await request(app).get('/api').expect(200);
       expect(response.body).toHaveProperty(
         'message',
-        'Acquisitions API is running!'
+        'Acquisitions API is running!',
       );
     });
   });
