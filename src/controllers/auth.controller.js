@@ -1,16 +1,16 @@
-import logger from '../config/logger.js';
-import { signUpSchema, signInSchema } from '../validations/auth.validation.js';
-import { formatValidationError } from '../utils/format.js';
-import { authenticateUser, createUser } from '../services/auth.service.js';
-import jwttoken from 'jsonwebtoken';
-import { cookies } from '../utils/cookies.js';
+import logger from "../config/logger.js";
+import { signUpSchema, signInSchema } from "../validations/auth.validation.js";
+import { formatValidationError } from "../utils/format.js";
+import { authenticateUser, createUser } from "../services/auth.service.js";
+import jwttoken from "jsonwebtoken";
+import { cookies } from "../utils/cookies.js";
 
 export const signUp = async (req, res, next) => {
   try {
     const validationResult = signUpSchema.safeParse(req.body);
     if (!validationResult.success) {
       return res.status(400).json({
-        error: 'Validation failed',
+        error: "Validation failed",
         details: formatValidationError(validationResult.error),
       });
     }
@@ -23,10 +23,10 @@ export const signUp = async (req, res, next) => {
       role: user.role,
     });
 
-    cookies.set(res, 'token', token);
+    cookies.set(res, "token", token);
     logger.info(`User registered successfully: ${email}`);
     res.status(201).json({
-      message: 'User registered',
+      message: "User registered",
       user: {
         id: user.id,
         name: user.name,
@@ -35,9 +35,9 @@ export const signUp = async (req, res, next) => {
       },
     });
   } catch (e) {
-    logger.error('Signup error', e);
-    if (e.message === 'User with this email already exists') {
-      return res.status(409).json({ error: 'Email already exist' });
+    logger.error("Signup error", e);
+    if (e.message === "User with this email already exists") {
+      return res.status(409).json({ error: "Email already exist" });
     }
     next(e);
   }
@@ -48,7 +48,7 @@ export const signIn = async (req, res, next) => {
     const validationResult = signInSchema.safeParse(req.body);
     if (!validationResult.success) {
       return res.status(400).json({
-        error: 'Validation failed',
+        error: "Validation failed",
         details: formatValidationError(validationResult.error),
       });
     }
@@ -61,10 +61,10 @@ export const signIn = async (req, res, next) => {
       role: user.role,
     });
 
-    cookies.set(res, 'token', token);
+    cookies.set(res, "token", token);
     logger.info(`User signed in successfully: ${email}`);
     res.status(200).json({
-      message: 'User signed in successfully',
+      message: "User signed in successfully",
       user: {
         id: user.id,
         name: user.name,
@@ -73,9 +73,9 @@ export const signIn = async (req, res, next) => {
       },
     });
   } catch (e) {
-    logger.error('Sign in error', e);
-    if (e.message === 'User not found' || e.message === 'Invalid password') {
-      return res.status(401).json({ error: 'Invalid credentials' });
+    logger.error("Sign in error", e);
+    if (e.message === "User not found" || e.message === "Invalid password") {
+      return res.status(401).json({ error: "Invalid credentials" });
     }
     next(e);
   }
@@ -83,13 +83,13 @@ export const signIn = async (req, res, next) => {
 
 export const signOut = async (req, res, next) => {
   try {
-    cookies.clear(res, 'token');
-    logger.info('User signed out successfully');
+    cookies.clear(res, "token");
+    logger.info("User signed out successfully");
     res.status(200).json({
-      message: 'User signed out successfully',
+      message: "User signed out successfully",
     });
   } catch (e) {
-    logger.error('Sign out error', e);
+    logger.error("Sign out error", e);
     next(e);
   }
 };
