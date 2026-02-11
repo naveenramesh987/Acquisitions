@@ -89,9 +89,6 @@ To run the entire stack (App + DB) using Docker:
 ```bash
 # Development mode
 npm run dev:docker
-
-# Production mode
-npm run prod:docker
 ```
 
 ## 🧪 Testing
